@@ -1,0 +1,73 @@
+---
+title: "Broadcast_Analysis.Rmd"
+output: html_document
+date: "2025-06-22"
+---
+
+```{r}
+
+library(readr)
+
+library(tidyverse)
+
+library(ggplot2)
+
+df <- read_csv("broadcasting_football_data.csv")
+head(df)
+```
+
+# My research question was if the distribution of broadcasting revenue impact competitive balance and financial sustainability in European football leagues?
+# My arguments were that broadcasting revenue maintains competitivity, creates balance sustainability for clubs who rely heavily on broadcasting revenue to compete, and the unequality of the distribution creates less fan engagement
+
+```{r}
+colnames(df) <- c("League", "Club", "Broadcast_Revenue_Millions", "League_Wins_Last_11_Years")
+```
+
+```{r}
+
+ggplot(df, aes(x = reorder(Club, Broadcast_Revenue_Millions), 
+               y = Broadcast_Revenue_Millions, 
+               fill = League)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Broadcasting Revenue by Club",
+       x = "Club", y = "Broadcast Revenue (Million)") +
+  theme_minimal()
+
+# Real Madrid and Barcelona are at the top in terms of revenue. As for the other teams in the same league, there is a gap between them. Premier League clubs (Man City, Liverpool, Chelsea, Tottenham) also receive large, fairly balanced payments. Clubs from Serie A (Napoli, Inter, Juventus) are balanced, but clearly lower in revenue. There’s a clear concentration of broadcasting revenue among top Spanish and English clubs, with much smaller distribution among Italian clubs. This hints at unequal revenue sharing across leagues.
+```
+
+```{r}
+
+ggplot(df, aes(x = Broadcast_Revenue_Millions, 
+               y = League_Wins_Last_11_Years, 
+               color = League)) +
+  geom_point(size = 4) +
+  labs(title = "Revenue vs. League Wins",
+       x = "Broadcast Revenue (€M)",
+       y = "League Titles (Last 11 Seasons)")
+
+colnames(df)
+colnames(df) <- c("League", "Club", "Broadcast_Revenue_Millions", "League_Wins_Last_11_Years")
+
+
+# Clubs with higher broadcasting revenue (e.g., Real Madrid, Bayern, Juventus) also tend to have more league titles. There’s a loose positive correlation — more money seems to associate with more dominance. But it’s not perfect, some well-funded clubs (like PSG or Chelsea-type equivalents) don’t win as much. While high broadcasting revenue doesn’t guarantee titles, there’s a strong tendency that wealthier clubs dominate their leagues. This supports my hypothesis about broadcasting money driving competitive imbalance.
+```
+
+```{r}
+
+ggplot(df, aes(x = League, y = Broadcast_Revenue_Millions, fill = League)) +
+  geom_boxplot() +
+  labs(title = "Broadcast Revenue Distribution by League",
+       y = "Revenue (€M)", x = "League") +
+  theme_minimal()
+
+
+# Premier League has tight, balanced revenue distribution (small IQR). La Liga has high variance, with a few clubs (e.g., Real, Barca) making much more than others. Serie A has low overall revenue and very little variance, meaning all clubs get less and nearly the same. The Premier League practices more equal revenue sharing, while La Liga shows extreme inequality. Serie A distributes less to all showing both inequality and low revenue.
+```
+
+
+# This analysis confirms that broadcasting revenue plays a critical role in shaping the competitive landscape of top European football leagues.
+```
+
+
